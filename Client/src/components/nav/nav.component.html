@@ -1,0 +1,39 @@
+<header>
+  <nav class="bg-blue-500 shadow-md mb-3">
+    <ul class="flex justify-between p-4">
+      <li class="mr-4">
+        <a class="text-white hover:text-gray-200" [routerLink]="['/']">Home</a>
+      </li>
+
+      <li class="mr-4" *ngIf="authService.isLoggedIn()">
+        <a class="text-white hover:text-gray-200" [routerLink]="['/word-game']"
+          >Word Game</a
+        >
+      </li>
+
+      <div class="flex space-x-4 ml-auto">
+        <li class="mr-4" *ngIf="!authService.isLoggedIn()">
+          <a
+            class="text-white hover:text-gray-200"
+            [routerLink]="['/registration']"
+            >Register</a
+          >
+        </li>
+
+        <li class="mr-4" *ngIf="!authService.isLoggedIn()">
+          <a class="text-white hover:text-gray-200" [routerLink]="['/login']"
+            >Login</a
+          >
+        </li>
+
+        <li class="mr-4" *ngIf="authService.isLoggedIn()">
+          <a
+            class="text-white hover:text-gray-200"
+            (click)="authService.logout()"
+            >Logout</a
+          >
+        </li>
+      </div>
+    </ul>
+  </nav>
+</header>

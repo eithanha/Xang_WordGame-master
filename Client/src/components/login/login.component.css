@@ -1,0 +1,8 @@
+#eye {
+  font-size: 1.25rem;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(2%);
+  cursor: pointer;
+}

@@ -1,0 +1,18 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+  <h2 class="text-2xl font-bold mb-4">
+    Guesses Remaining: {{ guessesRemaining }}
+  </h2>
+  <p class="text-3xl tracking-widest mb-4">{{ displayedWord }}</p>
+  <input
+    type="text"
+    [(ngModel)]="currentGuess"
+    maxlength="1"
+    class="border p-2 text-lg mb-4"
+  />
+  <button
+    (click)="makeGuess()"
+    class="bg-blue-500 text-white px-4 py-2 rounded"
+  >
+    Guess
+  </button>
+</div>
