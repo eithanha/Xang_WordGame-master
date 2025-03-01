@@ -27,6 +27,7 @@ namespace Server.Controllers
             _jwtSecretKey = configuration["JwtSettings:SecretKey"];
         }
 
+
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] EmailLoginDetails details)
@@ -77,10 +78,10 @@ namespace Server.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, "User") // Example claim for role
+                new Claim(ClaimTypes.Role, "User") 
             };
 
-            var expiration = DateTime.UtcNow.AddHours(1); // Set token expiry time
+            var expiration = DateTime.UtcNow.AddHours(10); 
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

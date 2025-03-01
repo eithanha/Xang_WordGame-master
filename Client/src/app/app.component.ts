@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavComponent } from '../components/nav/nav.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,9 @@ import { NavComponent } from '../components/nav/nav.component';
 })
 export class AppComponent {
   title = 'Client';
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.init();
+  }
 }

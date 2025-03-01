@@ -17,7 +17,6 @@ export class GameService {
       Authorization: token ? `Bearer ${token}` : '',
     };
   }
-
   async getAllGames(): Promise<Game[]> {
     try {
       const response = await fetch(this.apiUrl, {
@@ -60,6 +59,8 @@ export class GameService {
         console.error('User is not authenticated');
         throw new Error('User is not authenticated');
       }
+
+      console.log('Token being sent:', token);
 
       const wordList = await this.fetchWordList();
       if (!wordList) throw new Error('Word list not available');
@@ -124,12 +125,13 @@ export class GameService {
 
   async fetchWordList(): Promise<any> {
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(
         'http://localhost:5000/assets/wordlist.json',
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }

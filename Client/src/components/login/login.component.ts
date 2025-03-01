@@ -31,7 +31,9 @@ export class LoginComponent {
     this.authService
       .login(this.email, this.password)
       .then(() => {
-        this.router.navigate(['/word-game']);
+        this.router.navigate(['/']).then(() => {
+          window.location.reload();
+        });
       })
       .catch((error) => {
         this.errorMessage = 'Invalid email or password';

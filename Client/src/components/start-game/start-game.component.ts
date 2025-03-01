@@ -11,40 +11,51 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './start-game.component.css',
 })
 export class StartGameComponent {
-  constructor(private gameService: GameService, private router: Router) {}
-
   guessesRemaining = 8;
   displayedWord = '_ _ _ _ _ _ _ _';
   currentGuess = '';
+  existingGameId: number | null = null;
+  game: any;
 
-  async startNewGame() {
-    try {
-      const game = await this.gameService.createGame();
-      if (!game || !game.id) {
-        throw new Error('New Game is null or missing ID');
-      }
-
-      console.log('New Game Created: ', game);
-      this.router.navigate([`/word-game/${game.id}`]);
-    } catch (error) {
-      console.error('Error Creating Game: ', error);
-    }
-  }
+  constructor(private gameService: GameService, private router: Router) {}
 
   async makeGuess() {
+    if (!this.existingGameId) {
+      console.error('No game in progress. Start a new game first.');
+
+      return;
+    }
+
     if (this.currentGuess) {
       try {
         console.log('User guessed:', this.currentGuess);
-        const game = await this.gameService.createGame();
+        const response = await fetch(
+          `http://localhost:5000/api/games/${this.existingGameId}/guesses?guess=${this.currentGuess}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
+            },
+          }
+        );
 
-        console.log('New Game Created: ', game);
-        console.log('New Game Data: ', game);
-        if (!game || !game.id) {
-          throw new Error('New Game is null or missing ID');
+        if (!response.ok) {
+          throw new Error('Failed to make a guess');
         }
-        this.router.navigate([`/word-game/${game.id}`]);
+
+        const game = await response.json();
+        console.log('Updated Game:', game);
+
+        if (game && game.view && game.remainingGuesses !== undefined) {
+          this.displayedWord = game.view;
+          this.guessesRemaining = game.remainingGuesses;
+        } else {
+          throw new Error('Invalid game response');
+        }
       } catch (error) {
-        console.error('Error Creating Game: ', error);
+        console.error('Error Making Guess:', error);
+        alert('Error making guess. Please try again.');
       }
       this.currentGuess = '';
     }

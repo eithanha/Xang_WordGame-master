@@ -9,12 +9,10 @@ public class Game{
   [Key]
   public int Id { get; set; }
   
-  [Required]
-  public string Name { get; set; }
 
   [ForeignKey("UserId")]
   public ApplicationUser User { get; set; }
-  public string UserId { get ; set; }
+  public string? UserId { get ; set; }
 
   [Required]
   public string Status { get; set; }
@@ -26,8 +24,5 @@ public class Game{
   public string View {get; set; }
   public int RemainingGuesses { get; set; } = 8;
 
-    // public static implicit operator Game(Game v)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    
 }

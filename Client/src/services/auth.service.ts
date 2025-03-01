@@ -12,6 +12,12 @@ export class AuthService {
 
   constructor(private router: Router) {}
 
+  private checkLoginStatus() {
+    if (!localStorage.getItem('token')) {
+      this.router.navigate(['/login']);
+    }
+  }
+
   async register(email: string, password: string): Promise<any> {
     try {
       const response = await fetch(`${this.apiUrl}/register`, {
@@ -71,6 +77,7 @@ export class AuthService {
         console.log('Login successful:', data);
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.email);
+        this.authStatusSubject.next(true);
       } else {
         throw new Error('Login failed: No token received');
       }
@@ -93,5 +100,9 @@ export class AuthService {
     localStorage.removeItem('username');
     this.authStatusSubject.next(false);
     this.router.navigate(['/']);
+  }
+
+  init() {
+    this.checkLoginStatus();
   }
 }
