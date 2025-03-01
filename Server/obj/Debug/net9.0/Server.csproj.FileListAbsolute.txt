@@ -413,6 +413,7 @@ C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Server.runti
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Server.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Server.pdb
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Humanizer.dll
+C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.UI.dll
@@ -445,6 +446,8 @@ C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.Ex
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.NET.StringTools.dll
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\bin\Debug\net9.0\Microsoft.VisualStudio.Web.CodeGeneration.dll
@@ -660,6 +663,7 @@ C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\Server.MvcAp
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\Server.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\Server.RazorAssemblyInfo.cache
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\Server.RazorAssemblyInfo.cs
+C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\Server.sourcelink.json
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\scopedcss\bundle\Server.styles.css
 C:\Users\xangh\Desktop\Xang_WordGame-master\Server\obj\Debug\net9.0\scopedcss\projectbundle\Server.bundle.scp.css

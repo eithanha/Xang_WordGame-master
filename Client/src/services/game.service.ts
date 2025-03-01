@@ -125,7 +125,14 @@ export class GameService {
   async fetchWordList(): Promise<any> {
     try {
       const response = await fetch(
-        'http://localhost:5000/assets/wordlist.json'
+        'http://localhost:5000/assets/wordlist.json',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+        }
       );
 
       if (!response.ok) {

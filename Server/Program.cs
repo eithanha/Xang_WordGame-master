@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Server.Data;
 using Server.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -22,31 +23,38 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddControllers();
-
 builder.Services.AddControllersWithViews();
-
 builder.Services.AddRazorPages();
+
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         builder => builder
-            //.AllowAnyOrigin()
-            .WithOrigins("http://localhost:4200") 
+            .WithOrigins("http://localhost:4200")  
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials()); 
 });
 
 
-
-
-
-
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = "http://localhost:5000",  
+            ValidAudience = "http://localhost:4200",  
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("{aZVBOG@M>Enc!:M@yzX6e!Br~f+YHcg{x_fR5$;Gq</xq/>zGClIto{*}9)33g")) 
+        };
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -54,33 +62,24 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseStaticFiles();
 
-app.UseCors("AllowFrontend"); 
+app.UseCors("AllowFrontend");  
 
-app.UseAuthentication(); 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+// app.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller=Home}/{action=Index}/{id?}")
+//     .WithStaticAssets();
 
 app.MapRazorPages();
-   //.WithStaticAssets();
-
 app.MapControllers();
-
-
 
 app.Run();
