@@ -18,15 +18,14 @@ namespace Server.Controllers
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly string _jwtSecretKey;
+        private readonly IConfiguration _configuration;
 
         public AuthController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _jwtSecretKey = configuration["JwtSettings:SecretKey"];
+            _configuration = configuration;
         }
-
 
         [AllowAnonymous]
         [HttpPost("register")]
@@ -76,22 +75,25 @@ namespace Server.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, "User") 
+                new Claim(ClaimTypes.Role, "User")
             };
 
-            var expiration = DateTime.UtcNow.AddHours(10); 
+            var secretKey = _configuration["JwtSettings:SecretKey"];
+            var issuer = _configuration["JwtSettings:Issuer"];
+            var audience = _configuration["JwtSettings:Audience"];
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "http://localhost:5000", 
-                audience: "http://localhost:4200", 
-                expires: expiration,  
-                signingCredentials: creds,
-                claims: claims 
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(10),
+                signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

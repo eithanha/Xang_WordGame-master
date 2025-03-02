@@ -1,0 +1,119 @@
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+  <div
+    class="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6"
+  >
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Word Game</h2>
+
+    <div class="space-y-6" *ngIf="game && game.status === 'Unfinished'">
+      <div class="text-center">
+        <p class="text-4xl font-mono tracking-wider mb-4">
+          {{ displayedWord }}
+        </p>
+        <p
+          class="text-lg"
+          [ngClass]="{
+            'text-red-600 font-bold': guessesRemaining <= 3,
+            'text-gray-600': guessesRemaining > 3
+          }"
+        >
+          Guesses Remaining: {{ guessesRemaining }}
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="flex space-x-2">
+          <input
+            type="text"
+            [(ngModel)]="currentGuess"
+            maxlength="1"
+            placeholder="Enter a letter"
+            [disabled]="game.status !== 'Unfinished'"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+          />
+          <button
+            (click)="makeGuess()"
+            [disabled]="!currentGuess || game.status !== 'Unfinished'"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          >
+            Guess Letter
+          </button>
+        </div>
+
+        <div class="flex space-x-2">
+          <input
+            type="text"
+            [(ngModel)]="wordGuess"
+            [maxlength]="game.target.length"
+            placeholder="Guess the whole word"
+            [disabled]="game.status !== 'Unfinished'"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+          />
+          <button
+            (click)="makeWordGuess()"
+            [disabled]="
+              !wordGuess ||
+              wordGuess.length !== game.target.length ||
+              game.status !== 'Unfinished'
+            "
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          >
+            Guess Word
+          </button>
+        </div>
+
+        <div class="text-sm text-gray-600 mt-4" *ngIf="game.guesses">
+          Previous guesses:
+          <span class="font-mono">{{ game.guesses.split("").join(", ") }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center space-y-4" *ngIf="game && game.status === 'Won'">
+      <h3 class="text-2xl font-bold text-green-600">
+        Congratulations! You Won!
+      </h3>
+      <p class="text-lg">
+        The word was: <span class="font-mono font-bold">{{ game.target }}</span>
+      </p>
+      <button
+        (click)="startNewGame()"
+        class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+      >
+        Play Again
+      </button>
+    </div>
+
+    <div class="text-center space-y-4" *ngIf="game && game.status === 'Lost'">
+      <h3 class="text-2xl font-bold text-red-600">Game Over!</h3>
+      <p class="text-lg">
+        The word was: <span class="font-mono font-bold">{{ game.target }}</span>
+      </p>
+      <button
+        (click)="startNewGame()"
+        class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+      >
+        Try Again
+      </button>
+    </div>
+
+    <div
+      class="mt-4 p-3 rounded-lg text-center"
+      *ngIf="message"
+      [ngClass]="{
+        'bg-red-100 text-red-700':
+          message.includes('Error') || message.includes('Failed'),
+        'bg-yellow-100 text-yellow-700': message.includes('already guessed'),
+        'bg-green-100 text-green-700': message.includes('Congratulations')
+      }"
+    >
+      {{ message }}
+    </div>
+
+    <button
+      (click)="goBack()"
+      class="mt-8 w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+    >
+      Quit Game
+    </button>
+  </div>
+</div>

@@ -6,20 +6,23 @@ import { Game } from '../app/models/game.model';
 })
 export class GameService {
   private apiUrl = 'http://localhost:5000/api/games';
+  private currentGame: Game | null = null;
 
-  constructor() {}
-
-  private getHeaders() {
+  private getHeaders(): HeadersInit {
     const token = localStorage.getItem('token');
-    console.log('Token:', token);
     return {
       'Content-Type': 'application/json',
       Authorization: token ? `Bearer ${token}` : '',
     };
   }
+
+  getCurrentGame(): Game | null {
+    return this.currentGame;
+  }
+
   async getAllGames(): Promise<Game[]> {
     try {
-      const response = await fetch(this.apiUrl, {
+      const response = await fetch(`${this.apiUrl}/get-all`, {
         method: 'GET',
         headers: this.getHeaders(),
       });
@@ -45,7 +48,9 @@ export class GameService {
         throw new Error(`Failed to fetch game with ID ${gameId}`);
       }
 
-      return await response.json();
+      const game = await response.json();
+      this.currentGame = game;
+      return game;
     } catch (error) {
       console.error('Error fetching game:', error);
       throw error;
@@ -60,28 +65,18 @@ export class GameService {
         throw new Error('User is not authenticated');
       }
 
-      console.log('Token being sent:', token);
-
-      const wordList = await this.fetchWordList();
-      if (!wordList) throw new Error('Word list not available');
-
-      const words = wordList.med;
-      const targetWord = words[Math.floor(Math.random() * words.length)];
-
       const response = await fetch(this.apiUrl, {
         method: 'POST',
         headers: this.getHeaders(),
-        body: JSON.stringify({ target: targetWord }),
       });
 
-      console.log('Game creation response:', response);
-
       if (!response.ok) {
-        console.error('Failed to create game', response);
         throw new Error('Failed to create game');
       }
 
-      return await response.json();
+      const game = await response.json();
+      this.currentGame = game;
+      return game;
     } catch (error) {
       console.error('Error creating game:', error);
       return null;
@@ -90,17 +85,31 @@ export class GameService {
 
   async makeGuess(gameId: number, guess: string): Promise<Game> {
     try {
-      const response = await fetch(`${this.apiUrl}/${gameId}/guesses`, {
+      if (!this.currentGame) {
+        throw new Error('No game in progress. Start a new game first.');
+      }
+
+      console.log(`Making guess for game ${gameId}: "${guess}"`);
+      const endpoint = `${this.apiUrl}/${gameId}/guess`;
+      console.log('Endpoint:', endpoint);
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: this.getHeaders(),
-        body: JSON.stringify({ guess }),
+        body: JSON.stringify(guess),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to make a guess');
+        const errorText = await response.text();
+        if (errorText.includes('already guessed')) {
+          throw new Error('Letter already guessed');
+        }
+        throw new Error(errorText || 'Failed to make guess');
       }
 
-      return await response.json();
+      const updatedGame = await response.json();
+      this.currentGame = updatedGame;
+      return updatedGame;
     } catch (error) {
       console.error('Error making guess:', error);
       throw error;
@@ -117,38 +126,27 @@ export class GameService {
       if (!response.ok) {
         throw new Error('Failed to delete game');
       }
+      this.currentGame = null;
     } catch (error) {
       console.error('Error deleting game:', error);
       throw error;
     }
   }
 
-  async fetchWordList(): Promise<any> {
+  async getMyGames(): Promise<Game[]> {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(
-        'http://localhost:5000/assets/wordlist.json',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await fetch(`${this.apiUrl}/my-games`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error fetching word list:', errorText);
-        throw new Error('Failed to fetch word list');
+        throw new Error('Failed to fetch games');
       }
-
-      const data = await response.json();
-      console.log('Word list fetched successfully:', data);
-      return data;
+      return await response.json();
     } catch (error) {
-      console.error('Error fetching word list:', error);
-      return null;
+      console.error('Error fetching my games:', error);
+      throw error;
     }
   }
 }

@@ -34,24 +34,53 @@ builder.Services.AddCors(options =>
             .WithOrigins("http://localhost:4200")  
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .AllowCredentials()); 
+            .AllowCredentials()
+            .SetIsOriginAllowed(_ => true)); // Be careful with this in production
 });
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options => 
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = "http://localhost:5000",  
-            ValidAudience = "http://localhost:4200",  
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("{aZVBOG@M>Enc!:M@yzX6e!Br~f+YHcg{x_fR5$;Gq</xq/>zGClIto{*}9)33g")) 
-        };
-    });
+            Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("OnTokenValidated: Token was validated");
+            return Task.CompletedTask;
+        },
+        OnMessageReceived = context =>
+        {
+            Console.WriteLine($"OnMessageReceived: Token: {context.Token}");
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            Console.WriteLine($"OnChallenge: {context.Error}, {context.ErrorDescription}");
+            return Task.CompletedTask;
+        }
+    };
+});
 
 builder.Services.AddAuthorization(options =>
 {

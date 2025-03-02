@@ -5,9 +5,8 @@ import { LoginComponent } from '../components/login/login.component';
 import { LogoutComponent } from '../components/logout/logout.component';
 import { WordGameComponent } from '../components/word-game/word-game.component';
 import { PageNotFoundComponent } from '../components/page-not-found/page-not-found.component';
-import { StartGameComponent } from '../components/start-game/start-game.component';
-import { GameViewComponent } from '../components/game-view/game-view.component';
-import { GameComponent } from '../components/game/game.component';
+import { ActiveGameComponent } from '../components/active-game/active-game.component';
+import { GameHistoryComponent } from '../components/game-history/game-history.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,9 +14,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'word-game', component: WordGameComponent },
-
-  { path: 'start-game', component: StartGameComponent },
-  { path: 'game/:gameId', component: GameComponent },
-  { path: 'game-view', component: GameViewComponent },
+  { path: 'game/:id', component: ActiveGameComponent },
+  { path: 'history', component: GameHistoryComponent },
   { path: '**', component: PageNotFoundComponent },
 ];

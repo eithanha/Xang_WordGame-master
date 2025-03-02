@@ -22,29 +22,16 @@ export class StartGameComponent {
   async makeGuess() {
     if (!this.existingGameId) {
       console.error('No game in progress. Start a new game first.');
-
       return;
     }
 
     if (this.currentGuess) {
       try {
         console.log('User guessed:', this.currentGuess);
-        const response = await fetch(
-          `http://localhost:5000/api/games/${this.existingGameId}/guesses?guess=${this.currentGuess}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-            },
-          }
+        const game = await this.gameService.makeGuess(
+          this.existingGameId,
+          this.currentGuess
         );
-
-        if (!response.ok) {
-          throw new Error('Failed to make a guess');
-        }
-
-        const game = await response.json();
         console.log('Updated Game:', game);
 
         if (game && game.view && game.remainingGuesses !== undefined) {

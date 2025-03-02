@@ -1,0 +1,143 @@
+<div class="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden p-6 mb-6">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-6">
+        Game History
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-blue-50 rounded-lg p-4 text-center">
+          <p class="text-sm text-blue-600 font-medium">Total Games</p>
+          <p class="text-2xl font-bold text-blue-800">
+            {{ games ? games.length : 0 }}
+          </p>
+        </div>
+        <div class="bg-green-50 rounded-lg p-4 text-center">
+          <p class="text-sm text-green-600 font-medium">Games Won</p>
+          <p class="text-2xl font-bold text-green-800">{{ getWonGames() }}</p>
+        </div>
+        <div class="bg-red-50 rounded-lg p-4 text-center">
+          <p class="text-sm text-red-600 font-medium">Games Lost</p>
+          <p class="text-2xl font-bold text-red-800">{{ getLostGames() }}</p>
+        </div>
+        <div class="bg-purple-50 rounded-lg p-4 text-center">
+          <p class="text-sm text-purple-600 font-medium">Win Rate</p>
+          <p class="text-2xl font-bold text-purple-800">{{ getWinRate() }}%</p>
+        </div>
+      </div>
+
+      <button
+        (click)="startNewGame()"
+        class="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors mb-6"
+      >
+        Start New Game
+      </button>
+    </div>
+
+    <div
+      *ngIf="!games || games.length === 0"
+      class="bg-white rounded-xl shadow-lg p-8 text-center"
+    >
+      <p class="text-lg text-gray-600">
+        No games played yet. Start a new game to begin!
+      </p>
+    </div>
+
+    <div *ngIf="games && games.length > 0" class="space-y-4">
+      <div
+        *ngFor="let game of games"
+        class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+      >
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <span class="text-lg font-semibold text-gray-900"
+                >Game #{{ game.id }}</span
+              >
+              <span
+                class="px-3 py-1 rounded-full text-sm font-medium"
+                [ngClass]="{
+                  'bg-green-100 text-green-800': game.status === 'Won',
+                  'bg-red-100 text-red-800': game.status === 'Lost',
+                  'bg-blue-100 text-blue-800': game.status === 'Unfinished'
+                }"
+              >
+                {{ game.status }}
+              </span>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                *ngIf="game.status === 'Unfinished'"
+                (click)="continueGame(game.id)"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors text-sm"
+              >
+                Continue
+              </button>
+              <button
+                (click)="deleteGame(game.id)"
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors text-sm"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <p class="text-gray-600">
+                Word:
+                <span class="font-mono font-medium text-gray-900">
+                  {{ game.status === "Unfinished" ? "****" : game.target }}
+                </span>
+              </p>
+              <p class="text-gray-600">
+                Current Progress:
+                <span class="font-mono font-medium text-gray-900">{{
+                  game.view
+                }}</span>
+              </p>
+            </div>
+            <div class="space-y-2">
+              <p class="text-gray-600">
+                Guesses Made:
+                <span class="font-mono font-medium text-gray-900">
+                  {{
+                    game.guesses ? game.guesses.split("").join(", ") : "None"
+                  }}
+                </span>
+              </p>
+              <p class="text-gray-600">
+                Remaining Guesses:
+                <span
+                  class="font-medium"
+                  [ngClass]="{
+                    'text-red-600': game.remainingGuesses <= 3,
+                    'text-gray-900': game.remainingGuesses > 3
+                  }"
+                >
+                  {{ game.remainingGuesses }}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="message"
+      class="fixed bottom-4 right-4 max-w-md p-4 rounded-lg shadow-lg"
+      [ngClass]="{
+        'bg-red-100 text-red-700':
+          message.includes('Error') || message.includes('Failed'),
+        'bg-green-100 text-green-700': message.includes('Success'),
+        'bg-blue-100 text-blue-700':
+          !message.includes('Error') &&
+          !message.includes('Failed') &&
+          !message.includes('Success')
+      }"
+    >
+      {{ message }}
+    </div>
+  </div>
+</div>
