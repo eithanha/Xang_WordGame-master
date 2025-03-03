@@ -94,7 +94,7 @@ export class ActiveGameComponent implements OnInit {
     this.guessesRemaining = updatedGame.remainingGuesses;
 
     if (updatedGame.status === 'Won') {
-      this.message = 'Congratulations! You won! 🎉';
+      this.message = 'Congratulations! You won!';
     } else if (updatedGame.status === 'Lost') {
       this.message = `Game Over! The word was "${updatedGame.target}"`;
     }

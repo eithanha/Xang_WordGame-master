@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   selector: 'app-registration',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css'], // Corrected typo here
+  styleUrls: ['./registration.component.css'],
 })
 export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
@@ -64,12 +64,13 @@ export class RegistrationComponent implements OnInit {
         Swal.fire({
           title: 'Registration Failed!',
           text:
-            error.message ||
-            'An error occurred while registering. Please try again.',
+            'Passwords must have at least one non-alphanumeric character (!@#$%^).\n' +
+            "Passwords must have at least one digit ('0'-'9').\n" +
+            "Passwords must have at least one uppercase letter ('A'-'Z').",
           icon: 'error',
           confirmButtonText: 'OK',
         });
-
+        this.router.navigate(['/registration']);
         console.error('Registration error:', error);
       } else {
         Swal.fire({

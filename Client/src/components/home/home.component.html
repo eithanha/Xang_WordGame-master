@@ -5,9 +5,13 @@
     <div *ngIf="!isLoggedIn">
       <p class="text-xl mb-4">
         Please
-        <a href="/login" class="text-blue-500 hover:underline">Log in</a>
+        <a [routerLink]="['/login']" class="text-blue-500 hover:underline"
+          >Log in</a
+        >
         or
-        <a href="/registration" class="text-blue-500 hover:underline"
+        <a
+          [routerLink]="['/registration']"
+          class="text-blue-500 hover:underline"
           >Register</a
         >
       </p>
@@ -17,7 +21,7 @@
       <p class="text-xl mb-4">Welcome, {{ username }}!</p>
       <p class="text-lg">
         <a
-          href="/history"
+          [routerLink]="['/history']"
           class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition duration-300"
           >Start Playing</a
         >
