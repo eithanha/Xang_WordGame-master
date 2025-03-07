@@ -7,7 +7,7 @@ public class KeyGenerator
     {
         using (var randomNumberGenerator = new RNGCryptoServiceProvider())
         {
-            byte[] key = new byte[32];  
+            byte[] key = new byte[32];
             randomNumberGenerator.GetBytes(key);
             return Convert.ToBase64String(key);
         }

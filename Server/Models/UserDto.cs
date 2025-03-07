@@ -1,7 +1,8 @@
 namespace Server.Models;
 
-public class UserDto{
-  public string Id { get; set; }
-  public string Email { get; set; }
+public class UserDto
+{
+    public string Id { get; set; }
+    public string Email { get; set; }
 
 }

@@ -135,6 +135,6 @@ export class ActiveGameComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/history']);
+    this.router.navigate(['/word-game']);
   }
 }

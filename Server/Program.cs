@@ -31,15 +31,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         builder => builder
-            .WithOrigins("http://localhost:4200")  
+            .WithOrigins("http://localhost:4200")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials()
-            .SetIsOriginAllowed(_ => true)); // Be careful with this in production
+            .SetIsOriginAllowed(_ => true)); 
 });
 
 
-builder.Services.AddAuthentication(options => 
+builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -84,7 +84,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));  // Policy to require the "User" role
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));  
 });
 
 
@@ -116,7 +116,7 @@ else
 app.UseRouting();
 
 
-app.UseCors("AllowFrontend");  
+app.UseCors("AllowFrontend");
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();

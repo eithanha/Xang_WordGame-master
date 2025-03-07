@@ -91,7 +91,7 @@ namespace Server.Controllers
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(10),
+                expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
             );
 
