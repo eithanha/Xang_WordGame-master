@@ -48,20 +48,6 @@ export class ActiveGameComponent implements OnInit {
     }
   }
 
-  onKeyPress(event: KeyboardEvent): boolean {
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-      return true;
-    }
-
-    const char = String.fromCharCode(event.keyCode || event.charCode);
-    if (/^[a-zA-Z]$/.test(char)) {
-      return true;
-    }
-
-    event.preventDefault();
-    return false;
-  }
-
   async makeGuess() {
     if (!this.currentGuess || !this.game) {
       return;
