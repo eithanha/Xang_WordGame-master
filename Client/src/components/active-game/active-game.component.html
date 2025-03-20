@@ -43,9 +43,9 @@
           <input
             type="text"
             [(ngModel)]="wordGuess"
-            [maxlength]="game.target.length"
+            [maxlength]="game?.target?.length"
             placeholder="Guess the whole word"
-            [disabled]="game.status !== 'Unfinished'"
+            [disabled]="game?.status !== 'Unfinished'"
             class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
           />
           <button

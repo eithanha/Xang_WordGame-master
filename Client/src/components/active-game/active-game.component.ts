@@ -49,7 +49,6 @@ export class ActiveGameComponent implements OnInit {
   }
 
   onKeyPress(event: KeyboardEvent): boolean {
-    // Allow letters, backspace, and delete for word guesses
     if (event.key === 'Backspace' || event.key === 'Delete') {
       return true;
     }
@@ -122,7 +121,7 @@ export class ActiveGameComponent implements OnInit {
 
   private handleGuessError(error: any) {
     console.error('Error making guess:', error);
-    if (error.message?.includes('already guessed')) {
+    if (error.message?.toLowerCase().includes('already guessed')) {
       this.message = 'You already guessed that letter! Try a different one.';
     } else if (error.message?.includes('letters long')) {
       this.message = error.message;
