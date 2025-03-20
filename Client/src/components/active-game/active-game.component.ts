@@ -48,8 +48,28 @@ export class ActiveGameComponent implements OnInit {
     }
   }
 
+  onKeyPress(event: KeyboardEvent): boolean {
+    // Allow letters, backspace, and delete for word guesses
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+      return true;
+    }
+
+    const char = String.fromCharCode(event.keyCode || event.charCode);
+    if (/^[a-zA-Z]$/.test(char)) {
+      return true;
+    }
+
+    event.preventDefault();
+    return false;
+  }
+
   async makeGuess() {
     if (!this.currentGuess || !this.game) {
+      return;
+    }
+
+    if (!/^[a-zA-Z]+$/.test(this.currentGuess)) {
+      this.message = 'Please enter only letters';
       return;
     }
 
