@@ -53,12 +53,15 @@ namespace Server.Controllers
                         Id = g.Id,
                         UserId = g.UserId,
                         Status = g.Status,
-                        Target = g.Target,
+                        Target = (g.Status == "Won" || g.Status == "Lost") ? g.Target : null,
                         Guesses = g.Guesses,
                         View = g.View,
                         RemainingGuesses = g.RemainingGuesses
                     })
                     .ToListAsync();
+
+
+                    
 
                 Console.WriteLine($"Found {games.Count} games for user {user.Id}");
                 return Ok(games);
@@ -153,7 +156,7 @@ namespace Server.Controllers
                     Id = game.Id,
                     UserId = game.UserId,
                     Status = game.Status,
-                    Target = game.Target,
+                    Target = (game.Status == "Won" || game.Status == "Lost") ? game.Target : null,
                     Guesses = game.Guesses,
                     View = game.View,
                     RemainingGuesses = game.RemainingGuesses
@@ -205,7 +208,7 @@ namespace Server.Controllers
                     Id = game.Id,
                     UserId = game.UserId,
                     Status = game.Status,
-                    Target = game.Target,
+                    Target = (game.Status == "Won" || game.Status == "Lost") ? game.Target : null,
                     Guesses = game.Guesses,
                     View = game.View,
                     RemainingGuesses = game.RemainingGuesses
@@ -324,7 +327,7 @@ namespace Server.Controllers
                     Id = game.Id,
                     UserId = game.UserId,
                     Status = game.Status,
-                    Target = game.Target,
+                    Target = (game.Status == "Won" || game.Status == "Lost") ? game.Target : null,
                     Guesses = game.Guesses,
                     View = game.View,
                     RemainingGuesses = game.RemainingGuesses
